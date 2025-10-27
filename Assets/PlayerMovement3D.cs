@@ -1,104 +1,156 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
+using TMPro; // Importante para TextMeshPro
 
 public class PlayerMovement3D : MonoBehaviour
 {
-    public float moveSpeed = 12f;          // 🔹 Velocidad aumentada de 8f a 12f
-    public float rotationSpeed = 5f;       // 🔹 Velocidad de rotación
-    public float jumpForce = 5f;           // 🔹 Fuerza del salto
-    
-    private Rigidbody rb;                  // Referencia al Rigidbody
-    private Vector3 movement;              // Dirección de movimiento
-    private bool canInteract = false;      // Si está cerca del gato
-    private bool isGrounded = true;        // 🔹 Si está en el suelo
-    
-    private float currentRotation = 0f;    // 🔹 Rotación actual suavizada
-    
+    [Header("Movimiento")]
+    public float moveSpeed = 12f;
+    public float rotationSpeed = 5f;
+    public float jumpForce = 5f;
+
+    [Header("Opciones")]
+    public float modelRotationOffset = 0f;
+
+    private Rigidbody rb;
+    private Animator animator;
+    private Vector3 movement;
+    private bool canInteract = false;
+    private bool isGrounded = true;
+    private float currentRotation = 0f;
+
     [Header("UI")]
-    public GameObject interactionCanvas;   // Canvas con el mensaje
-    
+    public GameObject interactionCanvas;
+
+    [Header("Narrativa Infiel")]
+    public GameObject narrativaCanvas;
+    private bool narrativaActiva = false;
+    private NPCMovement npcInfiel;
+
+    [Header("Conversación")]
+    public GameObject conversacionCanvas;
+
+    [Header("Texto Post-Conversación")]
+    public TextMeshProUGUI textoFinal; // Asignar en inspector
+    public string nuevoTexto = "¡La conversación ha terminado!"; // Texto que aparecerá
+
+    private string objetoInteractuando; // Para saber con quién interactuamos
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        if (rb == null)
-        {
-            Debug.LogError("⚠️ El objeto no tiene un componente Rigidbody.");
-        }
-        else
-        {
-            // Congelar rotación en X y Z para evitar que se voltee
+        animator = GetComponentInChildren<Animator>();
+
+        if (rb != null)
             rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-        }
-        
+
         if (interactionCanvas != null)
-        {
-            interactionCanvas.SetActive(false); // Ocultar el Canvas al inicio
-        }
+            interactionCanvas.SetActive(false);
+
+        if (narrativaCanvas != null)
+            narrativaCanvas.SetActive(false);
+
+        if (conversacionCanvas != null)
+            conversacionCanvas.SetActive(false);
     }
-    
+
     void Update()
     {
-        // Leer input de rotación (A/D o flechas laterales)
+        // Movimiento sigue activo siempre
         float rotationInput = Input.GetAxis("Horizontal");
-        
-        // Suavizar la rotación usando Lerp
         currentRotation = Mathf.Lerp(currentRotation, rotationInput, rotationSpeed * Time.deltaTime);
-        
-        // Aplicar rotación suave
-        transform.Rotate(0f, currentRotation * 50f * Time.deltaTime, 0f);
-        
-        // Leer input de movimiento (W/S o flechas verticales)
+        float rotationAmount = currentRotation * 50f * Time.deltaTime;
+        transform.rotation *= Quaternion.Euler(0f, rotationAmount, 0f);
+
+        if (Mathf.Abs(modelRotationOffset) > 0.001f)
+            transform.rotation = Quaternion.Euler(0f, modelRotationOffset, 0f) * transform.rotation;
+
         float moveZ = Input.GetAxis("Vertical");
-        
-        // Calcular movimiento hacia adelante o atrás
-        movement = transform.forward * moveZ;
-        
-        // 🔹 SALTO con Space
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        movement = (Quaternion.Euler(0f, modelRotationOffset, 0f) * transform.forward) * moveZ;
+
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded && rb != null)
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             isGrounded = false;
         }
-        
-        // Si el jugador puede interactuar y presiona E
-        if (canInteract && Input.GetKeyDown(KeyCode.E))
+
+        if (animator != null)
+            animator.SetBool("isWalking", Mathf.Abs(moveZ) > 0.1f);
+
+        // Interacción solo si narrativaActiva es false
+        if (!narrativaActiva && canInteract && Input.GetKeyDown(KeyCode.E))
         {
-            SceneManager.LoadScene("NarrativaInicio");
+            if (objetoInteractuando == "Infiel")
+            {
+                narrativaCanvas.SetActive(true);
+                narrativaActiva = true;
+                if (interactionCanvas != null)
+                    interactionCanvas.SetActive(false);
+                if (conversacionCanvas != null)
+                    conversacionCanvas.SetActive(true);
+            }
+            else if (objetoInteractuando == "Gato")
+            {
+                SceneManager.LoadScene("NarrativaInicio");
+            }
         }
     }
-    
+
+
     void FixedUpdate()
     {
-        // Aplicar movimiento más rápido
-        rb.MovePosition(rb.position + movement * moveSpeed * Time.fixedDeltaTime);
+
+        if (rb != null)
+            rb.MovePosition(rb.position + movement * moveSpeed * Time.fixedDeltaTime);
     }
-    
+
     void OnCollisionEnter(Collision collision)
     {
-        // 🔹 Detectar si toca el suelo
         isGrounded = true;
     }
-    
+
     void OnTriggerEnter(Collider other)
     {
-        // Si el jugador entra en contacto con el Gato
-        if (other.CompareTag("Gato"))
+        if (other.CompareTag("Gato") || other.CompareTag("Infiel"))
         {
             canInteract = true;
+            objetoInteractuando = other.tag;
+
             if (interactionCanvas != null)
                 interactionCanvas.SetActive(true);
+
+            if (other.CompareTag("Infiel"))
+                npcInfiel = other.GetComponent<NPCMovement>();
         }
     }
-    
+
     void OnTriggerExit(Collider other)
     {
-        // Si se aleja del Gato
-        if (other.CompareTag("Gato"))
+        if (other.CompareTag("Gato") || other.CompareTag("Infiel"))
         {
             canInteract = false;
+            objetoInteractuando = null;
+            npcInfiel = null;
             if (interactionCanvas != null)
                 interactionCanvas.SetActive(false);
         }
+    }
+
+    public void TerminarNarrativa()
+    {
+        if (narrativaCanvas != null)
+            narrativaCanvas.SetActive(false);
+
+        if (conversacionCanvas != null)
+            conversacionCanvas.SetActive(false);
+
+        narrativaActiva = false;
+
+        if (npcInfiel != null)
+            npcInfiel.enabled = true;
+
+        // Cambiar texto al terminar la conversación
+        if (textoFinal != null)
+            textoFinal.text = nuevoTexto;
     }
 }
