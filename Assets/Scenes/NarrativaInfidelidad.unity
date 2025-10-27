@@ -315,8 +315,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   imagenes:
-  - {fileID: 21300000, guid: 0b18ee1d6b61eb442b7c43ea85aad1a0, type: 3}
-  - {fileID: 21300000, guid: 62ff4a811413361428a4db22c8da7c25, type: 3}
+  - {fileID: 21300000, guid: fa3423b46c42e5c44b2c1690eafc0c9a, type: 3}
+  - {fileID: 21300000, guid: 6a93bfb3a67498b4eb52f67299f6f5dc, type: 3}
+  - {fileID: 21300000, guid: a27079506913c49409956fc6d7f142f9, type: 3}
+  - {fileID: 21300000, guid: 99d6e31f3791e8745a4d654c9f393051, type: 3}
+  - {fileID: 21300000, guid: fef9fce387ef4cd479f96b06c0ff340a, type: 3}
   displayImage: {fileID: 1644664908}
   audioFinal: {fileID: 0}
   canvasNarrativa: {fileID: 0}
