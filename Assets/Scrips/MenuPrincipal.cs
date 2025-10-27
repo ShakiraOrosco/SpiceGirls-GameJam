@@ -10,7 +10,7 @@ public class MenuPrincipal : MonoBehaviour
     public Button botonSalir;
 
     [Header("Nombre de escenas")]
-    public string nombreEscenaJuego = "Nivel1"; //Cambiar luego a epilogo
+    public string nombreEscenaJuego = "Epilogo"; //Cambiar luego a epilogo
     public string nombreEscenaSobreApp = "SobreApp";
 
     private void Start()
