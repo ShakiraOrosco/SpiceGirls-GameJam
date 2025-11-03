@@ -6,10 +6,10 @@ using UnityEngine.UI;
 public class TeresaMovimiento : MonoBehaviour
 {
     [Header("Movimiento")]
-    public float moveSpeed = 12f;
-    public float acceleration = 10f;
-    public float deceleration = 15f;
-    public float jumpForce = 5f;
+    public float moveSpeed = 3f;
+    public float acceleration = 1f;
+    public float deceleration = 5f;
+    public float jumpForce = 3f;
 
     [Header("Rotación con Mouse")]
     public float mouseSensitivity = 3f;
