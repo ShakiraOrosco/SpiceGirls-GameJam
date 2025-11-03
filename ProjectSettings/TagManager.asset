@@ -7,8 +7,13 @@ TagManager:
   - Gato
   - Infiel
   - Celular
+
   - Puerta
   - Bibliotecaria
+
+  - GatitoSi
+  - GatitoNo
+
   layers:
   - Default
   - TransparentFX
