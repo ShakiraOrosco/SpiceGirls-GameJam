@@ -7,6 +7,8 @@ TagManager:
   - Gato
   - Infiel
   - Celular
+  - GatitoSi
+  - GatitoNo
   layers:
   - Default
   - TransparentFX
