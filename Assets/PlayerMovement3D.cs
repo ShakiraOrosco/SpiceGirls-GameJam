@@ -5,8 +5,8 @@ using TMPro; // Importante para TextMeshPro
 public class PlayerMovement3D : MonoBehaviour
 {
     [Header("Movimiento")]
-    public float moveSpeed = 12f;
-    public float rotationSpeed = 5f;
+    public float moveSpeed = 3f;
+    public float mouseSensitivity = 3f; // Sensibilidad del mouse
     public float jumpForce = 5f;
 
     [Header("Opciones")]
@@ -17,7 +17,6 @@ public class PlayerMovement3D : MonoBehaviour
     private Vector3 movement;
     private bool canInteract = false;
     private bool isGrounded = true;
-    private float currentRotation = 0f;
 
     [Header("UI")]
     public GameObject interactionCanvas;
@@ -52,14 +51,17 @@ public class PlayerMovement3D : MonoBehaviour
 
         if (conversacionCanvas != null)
             conversacionCanvas.SetActive(false);
+
+        // Bloquear y ocultar el cursor
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     void Update()
     {
-        // Movimiento sigue activo siempre
-        float rotationInput = Input.GetAxis("Horizontal");
-        currentRotation = Mathf.Lerp(currentRotation, rotationInput, rotationSpeed * Time.deltaTime);
-        float rotationAmount = currentRotation * 50f * Time.deltaTime;
+        // Rotación con el mouse
+        float mouseX = Input.GetAxis("Mouse X");
+        float rotationAmount = mouseX * mouseSensitivity;
         transform.rotation *= Quaternion.Euler(0f, rotationAmount, 0f);
 
         if (Mathf.Abs(modelRotationOffset) > 0.001f)
@@ -93,6 +95,13 @@ public class PlayerMovement3D : MonoBehaviour
             {
                 SceneManager.LoadScene("NarrativaInicio");
             }
+        }
+
+        // Presionar ESC para liberar el cursor (opcional)
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
         }
     }
 
