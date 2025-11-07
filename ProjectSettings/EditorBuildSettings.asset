@@ -18,6 +18,9 @@ EditorBuildSettings:
     path: Assets/Scenes/SobreApp.unity
     guid: ac846cb339ba4ba4b8318a2e41ebe0da
   - enabled: 1
+    path: Assets/Scenes/Epilogo.unity
+    guid: a015a9595eb9e6b48ad4a05f5e44a144
+  - enabled: 1
     path: Assets/Scenes/Nivel1.unity
     guid: 3a041526f689d484a9ca3c676e0ce292
   - enabled: 1
