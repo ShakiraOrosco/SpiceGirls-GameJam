@@ -802,7 +802,7 @@ MonoBehaviour:
   botonIniciar: {fileID: 1325451793}
   botonSobreApp: {fileID: 1480100294}
   botonSalir: {fileID: 166435481}
-  nombreEscenaJuego: Nivel1
+  nombreEscenaJuego: Epilogo
   nombreEscenaSobreApp: SobreApp
 --- !u!4 &911392843
 Transform:

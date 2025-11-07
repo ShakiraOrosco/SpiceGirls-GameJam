@@ -18,9 +18,21 @@ EditorBuildSettings:
     path: Assets/Scenes/SobreApp.unity
     guid: ac846cb339ba4ba4b8318a2e41ebe0da
   - enabled: 1
+    path: Assets/Scenes/Epilogo.unity
+    guid: a015a9595eb9e6b48ad4a05f5e44a144
+  - enabled: 1
     path: Assets/Scenes/Nivel1.unity
     guid: 3a041526f689d484a9ca3c676e0ce292
   - enabled: 1
     path: Assets/Scenes/NarrativaInfidelidad.unity
     guid: 74fc87195c644124b92b7f2120ca96a5
+  - enabled: 1
+    path: Assets/Scenes/Epilogo.unity
+    guid: a015a9595eb9e6b48ad4a05f5e44a144
+  - enabled: 1
+    path: Assets/Scenes/Epilogo 1.unity
+    guid: 7776db57940072047bd13ceb3e34bd07
+  - enabled: 1
+    path: Assets/Scenes/Epilogo 2.unity
+    guid: 9b8dc8681ad7673428835f79a1efdb86
   m_configObjects: {}
