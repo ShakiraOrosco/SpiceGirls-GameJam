@@ -27,6 +27,9 @@ EditorBuildSettings:
     path: Assets/Scenes/NarrativaInfidelidad.unity
     guid: 74fc87195c644124b92b7f2120ca96a5
   - enabled: 1
+    path: Assets/Scenes/Nivel2.unity
+    guid: c08a37fe3dff9784dbfd19d2db1eef3e
+  - enabled: 1
     path: Assets/Scenes/Epilogo.unity
     guid: a015a9595eb9e6b48ad4a05f5e44a144
   - enabled: 1
