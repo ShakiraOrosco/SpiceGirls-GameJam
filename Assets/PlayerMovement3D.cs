@@ -21,7 +21,7 @@ public class PlayerMovement3D : MonoBehaviour
 
     [Header("UI")]
     public GameObject interactionCanvas;
-ñ
+
     [Header("Narrativa Infiel")]
     public GameObject narrativaCanvas;
     private bool narrativaActiva = false;
