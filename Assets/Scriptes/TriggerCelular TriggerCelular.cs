@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class TriggerCelular : MonoBehaviour
 {
-    // Tag del objeto que activará la narrativa
+    // Tag del objeto que activarï¿½ la narrativa
     public string tagObjeto = "Celular";
 
     // Nombre de la escena a cargar
@@ -14,7 +14,7 @@ public class TriggerCelular : MonoBehaviour
         // Verifica si el objeto que entra al trigger es el Player
         if (other.CompareTag("Player"))
         {
-            // Busca si el Player está interactuando con el objeto correcto
+            // Busca si el Player estï¿½ interactuando con el objeto correcto
             if (CompareTag(tagObjeto))
             {
                 // Cargar la escena de narrativa
