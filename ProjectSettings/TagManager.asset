@@ -7,13 +7,7 @@ TagManager:
   - Gato
   - Infiel
   - Celular
-
-  - Puerta
-  - Bibliotecaria
-
-  - GatitoSi
-  - GatitoNo
-
+  - Friend
   layers:
   - Default
   - TransparentFX
