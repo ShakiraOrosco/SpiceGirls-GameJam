@@ -11,8 +11,8 @@ public class TeresaMovimiento : MonoBehaviour
     public float deceleration = 5f;
     public float jumpForce = 3f;
 
-    [Header("Rotación con Mouse")]
-    public float mouseSensitivity = 3f;
+    [Header("Rotación con Teclas")]
+    public float rotationSpeed = 100f; // Velocidad de rotación con A y D
 
     private Rigidbody rb;
     private Animator animator;
@@ -24,11 +24,11 @@ public class TeresaMovimiento : MonoBehaviour
     public GameObject panelInteraccion; // Panel "Presiona E para hablar"
     public GameObject narrativaCanvas;
     public Image imagenNarrativa; // Imagen donde se muestran las narrativas
-    
+
     [Header("Configuración de Narrativas")]
     public Sprite[] narrativas; // Array de imágenes de narrativas
-    public float tiempoEntreNarrativas =7f; // Tiempo entre cada narrativa
-    
+    public float tiempoEntreNarrativas = 7f; // Tiempo entre cada narrativa
+
     private bool enRangoBibliotecaria = false;
     private bool narrativaActiva = false;
     private int narrativaActual = 0;
@@ -42,14 +42,10 @@ public class TeresaMovimiento : MonoBehaviour
         if (rb != null)
             rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
 
-        // Bloquear y ocultar el cursor
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-
         // Desactivar UI al inicio
         if (panelInteraccion != null)
             panelInteraccion.SetActive(false);
-        
+
         if (narrativaCanvas != null)
             narrativaCanvas.SetActive(false);
     }
@@ -60,26 +56,19 @@ public class TeresaMovimiento : MonoBehaviour
         if (narrativaActiva)
             return;
 
-        // Rotación con el mouse
-        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
-        transform.Rotate(Vector3.up * mouseX);
+        // Rotación con A y D
+        float rotationInput = Input.GetAxis("Horizontal");
+        transform.Rotate(Vector3.up * rotationInput * rotationSpeed * Time.deltaTime);
 
-        // Obtener input de movimiento
-        float moveX = Input.GetAxis("Horizontal");
+        // Movimiento adelante/atrás con W y S
         float moveZ = Input.GetAxis("Vertical");
+        Vector3 moveDirection = (transform.forward * moveZ).normalized;
 
-        // Calcular dirección de movimiento basada en la rotación actual
-        Vector3 moveDirection = (transform.right * moveX + transform.forward * moveZ).normalized;
-
-        // Suavizado del movimiento con aceleración/desaceleración
+        // Suavizado del movimiento
         if (moveDirection.magnitude > 0.1f)
-        {
             currentVelocity = Vector3.Lerp(currentVelocity, moveDirection * moveSpeed, acceleration * Time.deltaTime);
-        }
         else
-        {
             currentVelocity = Vector3.Lerp(currentVelocity, Vector3.zero, deceleration * Time.deltaTime);
-        }
 
         movement = currentVelocity;
 
@@ -96,16 +85,7 @@ public class TeresaMovimiento : MonoBehaviour
 
         // Interacción con la bibliotecaria
         if (enRangoBibliotecaria && Input.GetKeyDown(KeyCode.E) && !conversacionIniciada)
-        {
             IniciarConversacion();
-        }
-
-        // Desbloquear cursor con ESC
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-        }
     }
 
     void FixedUpdate()
@@ -123,9 +103,7 @@ public class TeresaMovimiento : MonoBehaviour
         {
             PuertaController puerta = collision.gameObject.GetComponent<PuertaController>();
             if (puerta != null)
-            {
                 puerta.AbrirPuerta();
-            }
         }
     }
 
@@ -165,10 +143,6 @@ public class TeresaMovimiento : MonoBehaviour
         if (narrativaCanvas != null)
             narrativaCanvas.SetActive(true);
 
-        // Mostrar y desbloquear cursor
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
-
         // Detener movimiento
         currentVelocity = Vector3.zero;
         movement = Vector3.zero;
@@ -183,19 +157,16 @@ public class TeresaMovimiento : MonoBehaviour
         for (int i = 0; i < narrativas.Length; i++)
         {
             narrativaActual = i;
-            
-            // Mostrar la imagen actual
+
             if (imagenNarrativa != null && narrativas[i] != null)
             {
                 imagenNarrativa.sprite = narrativas[i];
                 imagenNarrativa.enabled = true;
             }
 
-            // Esperar antes de mostrar la siguiente
             yield return new WaitForSeconds(tiempoEntreNarrativas);
         }
 
-        // Cuando terminen todas las narrativas
         TerminarNarrativa();
     }
 
@@ -206,16 +177,8 @@ public class TeresaMovimiento : MonoBehaviour
         // Desactivar canvas
         if (narrativaCanvas != null)
             narrativaCanvas.SetActive(false);
-
-        // Volver a bloquear cursor
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-
-        // Reiniciar para futuras conversaciones (opcional)
-        // conversacionIniciada = false; // Descomenta si quieres permitir hablar de nuevo
     }
 
-    // Método público para terminar manualmente si lo necesitas
     public void TerminarConversacionManual()
     {
         StopAllCoroutines();

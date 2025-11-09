@@ -15,6 +15,10 @@ public class MenuPrincipal : MonoBehaviour
 
     private void Start()
     {
+          // ✅ Asegurar que el cursor sea visible al abrir el menú
+    Cursor.lockState = CursorLockMode.None;
+    Cursor.visible = true;
+
         botonIniciar.onClick.AddListener(IniciarJuego);
         botonSobreApp.onClick.AddListener(IrASobreApp);
         botonSalir.onClick.AddListener(SalirDelJuego);

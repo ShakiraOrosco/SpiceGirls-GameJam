@@ -38,23 +38,28 @@ public class PlayerMovement3D : MonoBehaviour
 
     private string objetoInteractuando; // Para saber con quién interactuamos
 
-    void Start()
-    {
-        rb = GetComponent<Rigidbody>();
-        animator = GetComponentInChildren<Animator>();
+   void Start()
+{
+    rb = GetComponent<Rigidbody>();
+    animator = GetComponentInChildren<Animator>();
 
-        if (rb != null)
-            rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+    if (rb != null)
+        rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
 
-        if (interactionCanvas != null)
-            interactionCanvas.SetActive(false);
+    if (interactionCanvas != null)
+        interactionCanvas.SetActive(false);
 
-        if (narrativaCanvas != null)
-            narrativaCanvas.SetActive(false);
+    if (narrativaCanvas != null)
+        narrativaCanvas.SetActive(false);
 
-        if (conversacionCanvas != null)
-            conversacionCanvas.SetActive(false);
-    }
+    if (conversacionCanvas != null)
+        conversacionCanvas.SetActive(false);
+
+    // ✅ Asegurar que el cursor siempre sea visible
+    Cursor.lockState = CursorLockMode.None;
+    Cursor.visible = true;
+}
+
 
     void Update()
     {
