@@ -5,9 +5,11 @@ using TMPro; // Importante para TextMeshPro
 public class PlayerMovement3D : MonoBehaviour
 {
     [Header("Movimiento")]
-    public float moveSpeed = 12f;
-    public float rotationSpeed = 5f;
-    public float jumpForce = 5f;
+
+    public float moveSpeed = 3f;
+    public float rotationSpeed = 2f;
+    public float jumpForce = 3f;
+
 
     [Header("Opciones")]
     public float modelRotationOffset = 0f;
